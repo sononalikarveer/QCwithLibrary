@@ -37,47 +37,22 @@
 
 #     return explanations.get(reason_code, "No issues detected.")
 
-def generate_explanation(reason_code):
-    """
-    Converts machine-level reason codes into
-    human-readable QC explanations + recommendations
-    """
+def generate_explanation(reason_codes):
+    if not reason_codes:
+        return "No action needed."
+
+    if isinstance(reason_codes, str):
+        reason_codes = [r.strip() for r in reason_codes.split(",")]
 
     explanations = {
-        # Existing + earlier rules
-        "Missing Content": (
-            "Slide text or notes are missing. "
-            "Recommendation: Ensure both slide content and narration notes are present."
-        ),
-
-        "Topic Drift": (
-            "The narration discusses a different instructional concept than the slide. "
-            "Recommendation: Align the slide topic with the video explanation or split the content."
-        ),
-
-        "Multiple Concepts": (
-            "The slide covers too many instructional ideas at once. "
-            "Recommendation: Split the slide into smaller, focused chunks."
-        ),
-
-        # New rules you added
-        "MEANING_MISMATCH": (
-            "The slide content and video narration do not convey the same meaning. "
-            "Recommendation: Review the instructional intent and align slide content with narration."
-        ),
-
-        "WORD_LIMIT_EXCEEDED": (
-            "The slide contains more text than recommended for effective learning. "
-            "Recommendation: Reduce slide text and move detailed explanations to narration notes."
-        ),
-
-        "MISSING_CONTENT": (
-            "Important concepts mentioned in the narration are missing from the slide. "
-            "Recommendation: Add the missing key points to the slide for better learner clarity."
-        ),
-
-        # Default fallback
-        None: "No QC issues detected. Slide is properly chunked."
+        "Missing Content": "Add slide text and narration notes.",
+        "Topic Drift": "Align slide topic with narration.",
+        "Multiple Concepts": "Split content into smaller slides.",
+        "MEANING_MISMATCH": "Ensure slide meaning matches narration.",
+        "WORD_LIMIT_EXCEEDED": "Reduce slide text.",
+        "MISSING_CONTENT": "Add missing key concepts to slide."
     }
 
-    return explanations.get(reason_code, "QC issue detected. Please review the slide content.")
+    recs = [explanations.get(code, "Review slide.") for code in reason_codes]
+    return " ".join(recs)
+

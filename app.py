@@ -3,7 +3,7 @@ import yaml
 
 from src.ppt.ppt_reader import read_ppt
 from src.qc.chunking_validator import validate_slide
-from src.qc.explanation_engine import generate_recommendation
+from src.qc.explanation_engine import generate_explanation
 from src.report.excel_report import create_excel
 
 st.set_page_config(page_title="PPT Chunking QC", layout="wide")
@@ -24,7 +24,7 @@ if uploaded_file:
 
             for slide in slides:
                 res = validate_slide(slide, rules)
-                res["Recommendation"] = generate_recommendation(res)
+                res["Recommendation"] = generate_explanation(res.get("Reason Code"))
                 results.append(res)
 
             st.success("QC Completed")
