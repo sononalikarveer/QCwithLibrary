@@ -1,8 +1,8 @@
 from pptx import Presentation
 
-def read_ppt_from_file(file):
-    prs = Presentation(file)
-    slides_data = []
+def read_ppt(file_path):
+    prs = Presentation(file_path)
+    slides = []
 
     for idx, slide in enumerate(prs.slides, start=1):
         slide_text = []
@@ -14,10 +14,10 @@ def read_ppt_from_file(file):
         if slide.has_notes_slide:
             notes_text = slide.notes_slide.notes_text_frame.text
 
-        slides_data.append({
+        slides.append({
             "slide_number": idx,
-            "slide_text": " ".join(slide_text).strip(),
-            "notes_text": notes_text.strip()
+            "slide_text": " ".join(slide_text),
+            "notes_text": notes_text
         })
 
-    return slides_data
+    return slides
