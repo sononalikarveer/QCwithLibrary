@@ -1,6 +1,6 @@
 import yaml
-from ppt.ppt_reader import read_ppt
-from qc.chunking_validator import validate_slide
+from src.ppt.ppt_reader import read_ppt
+from src.qc.chunking_validator import validate_slide
 from report.excel_report import generate_excel_report
 
 PPT_PATH = "data/input_ppt/sample.pptx"

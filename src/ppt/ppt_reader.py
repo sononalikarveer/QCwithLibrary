@@ -1,7 +1,7 @@
 from pptx import Presentation
 
-def read_ppt(ppt_path):
-    prs = Presentation(ppt_path)
+def read_ppt_from_file(file):
+    prs = Presentation(file)
     slides_data = []
 
     for idx, slide in enumerate(prs.slides, start=1):

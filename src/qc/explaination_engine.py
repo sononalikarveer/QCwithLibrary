@@ -1,22 +1,14 @@
 def generate_explanation(result):
     if result["status"] == "PASS":
-        return "Slide is properly chunked. Notes elaborate on the same instructional concept."
+        return "Slide is properly chunked. Notes align with slide intent."
 
-    issues = result["issues"].lower()
+    if result["reason_code"] == "TOPIC_DRIFT":
+        return "Notes introduce a new instructional concept. Recommend splitting into a separate slide."
 
-    if "different instructional concept" in issues:
-        return (
-            "Notes introduce a new instructional concept that is not reflected on the slide. "
-            "This causes cognitive overload. Recommendation: split content into a separate slide."
-        )
+    if result["reason_code"] == "MULTI_TOPIC":
+        return "Multiple instructional concepts detected. Recommend splitting content."
 
-    if "multiple concepts" in issues:
-        return (
-            "Slide covers multiple instructional ideas in a single chunk. "
-            "Instructional design best practice recommends one concept per slide."
-        )
+    if result["reason_code"] == "MISSING_CONTENT":
+        return "Slide or notes are missing. Cannot validate chunking."
 
-    return (
-        "Slide content and narration are misaligned. "
-        "Recommendation: review chunk boundaries and align narration with slide intent."
-    )
+    return "Chunking issue detected. Review slide."
