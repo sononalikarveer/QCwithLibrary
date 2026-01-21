@@ -1,0 +1,7 @@
+python-pptx
+pandas
+openpyxl
+sentence-transformers
+pyyaml
+scikit-learn
+numpy

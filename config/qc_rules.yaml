@@ -1,0 +1,10 @@
+semantic_similarity:
+  min_slide_note_similarity: 0.65
+
+instructional_rules:
+  max_topics_per_slide: 1
+  allow_note_elaboration: true
+  allow_examples: true
+
+flags:
+  new_concept_threshold: 0.40
