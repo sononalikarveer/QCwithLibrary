@@ -59,15 +59,15 @@ def validate_slide(slide, rules):
         issues.append("Slide and narration meaning mismatch")
         reason_codes.append("MEANING_MISMATCH")
 
-    # Rule 4: Word limit
-    if word_count(slide_text) > rules["word_limits"]["avg_slide_word_limit"]:
-        issues.append("Slide text exceeds word limit")
-        reason_codes.append("WORD_LIMIT_EXCEEDED")
+    # # Rule 4: Word limit
+    # if word_count(slide_text) > rules["word_limits"]["avg_slide_word_limit"]:
+    #     issues.append("Slide text exceeds word limit")
+    #     reason_codes.append("WORD_LIMIT_EXCEEDED")
 
-    # Rule 5: Missing content coverage
-    if overlap_ratio < rules["content_coverage"]["min_concept_overlap_ratio"]:
-        issues.append("Important narration concepts missing in slide")
-        reason_codes.append("MISSING_CONTENT")
+    # # Rule 5: Missing content coverage
+    # if overlap_ratio < rules["content_coverage"]["min_concept_overlap_ratio"]:
+    #     issues.append("Important narration concepts missing in slide")
+    #     reason_codes.append("MISSING_CONTENT")
 
     status = "FAIL" if issues else "PASS"
 

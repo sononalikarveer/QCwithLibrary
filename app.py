@@ -6,7 +6,7 @@ from src.qc.chunking_validator import validate_slide
 from src.qc.explanation_engine import generate_explanation
 from src.report.excel_report import create_excel
 
-st.set_page_config(page_title="PPT Chunking QC", layout="wide")
+st.set_page_config(page_title="PPT Chunking QC", layout="wide", initial_sidebar_state="expanded")
 
 st.title("📊 PPT Chunking QC Tool")
 st.write("Upload a PPT file to validate instructional chunking.")
