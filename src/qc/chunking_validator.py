@@ -27,7 +27,7 @@ def validate_slide(slide, rules):
     reason_codes = []
 
     # Rule 0: Missing content
-    if not slide_text or not notes_text:
+    if not slide_text and not notes_text:
         return {
             "Slide": slide["slide_number"],
             "Status": "FAIL",
