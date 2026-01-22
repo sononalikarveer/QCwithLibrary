@@ -1,13 +1,10 @@
 import re
-from pptx.enum.dml import MSO_COLOR_TYPE
+from pptx.enum.text import MSO_AUTO_SIZE
 from pptx.dml.color import RGBColor
 
 def clean_text(text):
-    return re.sub(r"\s+", " ", text).strip()
+    return re.sub(r"\s+", " ", text.strip())
 
-# =========================
-# SLIDE TEXT EXTRACTION
-# =========================
 def get_slide_text(slide):
     points = []
 
@@ -20,23 +17,26 @@ def get_slide_text(slide):
             if not text:
                 continue
 
-            font_rgb = None
-            if (
-                para.runs
-                and para.runs[0].font.color
-                and para.runs[0].font.color.type == MSO_COLOR_TYPE.RGB
-            ):
-                font_rgb = para.runs[0].font.color.rgb
+            font_color = None
 
-            # Ignore decorative orange text
-            if font_rgb != RGBColor(242, 103, 34):
-                points.append(clean_text(text))
+            if para.runs:
+                color = para.runs[0].font.color
+
+                # ✅ SAFE COLOR CHECK
+                if color is not None and hasattr(color, "rgb"):
+                    font_color = color.rgb
+                else:
+                    font_color = None   # Theme / Auto color
+
+            # ❗ Exclude only if explicitly orange
+            if font_color == RGBColor(242, 103, 34):
+                continue
+
+            points.append(clean_text(text))
 
     return points
 
-# =========================
-# VO EXTRACTION
-# =========================
+
 def get_vo_text(slide):
     if not slide.has_notes_slide:
         return []
@@ -44,7 +44,7 @@ def get_vo_text(slide):
     notes = slide.notes_slide.notes_text_frame.text
 
     match = re.search(
-        r"(?i)vo:\s*(.*?)(Image Link:|Instructions to GD:|$)",
+        r'(?i)vo:\s*(.*?)(Image Link:|Instructions to GD:|$)',
         notes,
         re.DOTALL
     )
@@ -52,10 +52,8 @@ def get_vo_text(slide):
     if not match:
         return []
 
-    vo_block = match.group(1).strip()
-
     return [
         clean_text(line.strip("-• "))
-        for line in vo_block.split("\n")
+        for line in match.group(1).split("\n")
         if line.strip()
     ]

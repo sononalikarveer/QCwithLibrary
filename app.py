@@ -15,29 +15,27 @@ st.write("Upload a PPT file to validate instructional chunking.")
 
 uploaded_file = st.file_uploader("Upload PPT file", type=["pptx"])
 
-if uploaded_file:
-    if st.button("Run QC"):
-        with st.spinner("Running QC..."):
-            slides = read_ppt(uploaded_file)
+if uploaded_file and st.button("Run QC"):
+    with st.spinner("Running QC..."):
 
-            all_rows = []
-            summary_rows = []
+        slides = read_ppt(uploaded_file)
 
-            for slide_no, slide in enumerate(slides, start=1):
-                rows, summary = analyze_slide(slide, slide_no)
-                all_rows.extend(rows)
-                summary_rows.extend(summary)
+        results = []
 
-            st.success("QC Completed")
+        for slide_no, slide in enumerate(slides, start=1):
+            rows = analyze_slide(slide, slide_no)
+            results.extend(rows)
 
-            st.subheader("QC Results (Slide Point Analysis)")
-            st.dataframe(all_rows, use_container_width=True)
+        st.success("QC Completed")
 
-            excel_file = create_excel(all_rows, summary_rows)
+        st.subheader("QC Results")
+        st.dataframe(results, use_container_width=True)
 
-            st.download_button(
-                label="⬇ Download Excel Report",
-                data=excel_file,
-                file_name="ppt_chunking_qc_report.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
+        excel_file = create_excel(results)
+
+        st.download_button(
+            label="⬇ Download Excel Report",
+            data=excel_file,
+            file_name="ppt_chunking_qc_report.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )

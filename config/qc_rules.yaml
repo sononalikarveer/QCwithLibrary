@@ -1,20 +1,31 @@
-semantic_thresholds:
-  exact_copy: 0.98
-  strong_match: 0.75
-  partial_match: 0.50
+# =========================================================
+# PPT CHUNKING QC RULE CONFIGURATION
+# =========================================================
 
-coverage_rules:
-  min_vo_coverage_percent: 90
-  poor_vo_coverage_percent: 50
+semantic_matching:
+  exact_copy_threshold: 0.95      # Used to detect copy-paste
+  strong_match_threshold: 0.75    # Proper chunking
+  partial_match_threshold: 0.50   # Partial chunking
+  missing_match_threshold: 0.50   # Below this = not chunked
+
+vo_coverage:
+  min_coverage_good: 0.90         # ≥90% VO covered → Chunked Properly
+  min_coverage_partial: 0.50      # <50% → Not Chunked Properly
+  similarity_threshold: 0.75      # Used in VO → Slide coverage check
 
 word_limits:
-  avg_slide_word_limit: 35
+  avg_slide_word_limit: 40        # Average acceptable words per slide
+  hard_max_limit: 60              # Above this → Fail
 
-chunking_rules:
-  allow_partial_chunking: true
-  fail_on_exact_copy: false
+meaning_alignment:
+  min_meaning_similarity: 0.70    # Meaning mismatch threshold
 
-ui_labels:
-  chunked: "Chunked Properly"
-  partial: "Partially Chunked"
-  not_chunked: "Not Chunked Properly"
+content_rules:
+  allow_exact_copy: true          # Flag but do not auto-fail
+  require_vo_presence: true       # VO must exist
+  require_slide_text: true        # Slide must have visible content
+
+reporting:
+  show_similarity_score: true
+  round_similarity_to: 2
+  include_uncovered_vo: true
