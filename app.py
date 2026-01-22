@@ -1,8 +1,8 @@
 import streamlit as st
 
-from src.ppt.ppt_reader import read_ppt
-from src.qc.slide_analyzer import analyze_slide
-from src.report.excel_report import create_excel
+from src.ppt.ppt_reader import read_ppt # Read PPT slides (i/p)
+from src.qc.slide_analyzer import analyze_slide # The brain of QC logic
+from src.report.excel_report import create_excel # Create Excel report (o/p)
 
 st.set_page_config(
     page_title="PPT Chunking QC",
@@ -11,9 +11,9 @@ st.set_page_config(
 )
 
 st.title("📊 PPT Chunking QC Tool")
-st.write("Upload a PPT file to validate instructional chunking.")
+st.write("Upload Your PPT file here to validate instructional chunking.")
 
-uploaded_file = st.file_uploader("Upload PPT file", type=["pptx"])
+uploaded_file = st.file_uploader("Upload PPT ", type=["pptx"])
 
 if uploaded_file and st.button("Run QC"):
     with st.spinner("Running QC..."):

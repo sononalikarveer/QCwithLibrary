@@ -8,6 +8,8 @@ def clean_text(text):
 def get_slide_text(slide):
     points = []
 
+#Check does the text is from the PPT or from the notes
+
     for shape in slide.shapes:
         if not shape.has_text_frame:
             continue
