@@ -1,7 +1,9 @@
 streamlit
 python-pptx
-pandas
-openpyxl
 sentence-transformers
-scikit-learn
+torch
+pandas
+numpy
+openpyxl
 pyyaml
+scikit-learn

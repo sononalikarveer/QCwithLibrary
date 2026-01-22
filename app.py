@@ -1,12 +1,14 @@
 import streamlit as st
-import yaml
 
 from src.ppt.ppt_reader import read_ppt
-from src.qc.chunking_validator import validate_slide
-from src.qc.explanation_engine import generate_explanation
+from src.qc.slide_analyzer import analyze_slide
 from src.report.excel_report import create_excel
 
-st.set_page_config(page_title="PPT Chunking QC", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(
+    page_title="PPT Chunking QC",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
 st.title("📊 PPT Chunking QC Tool")
 st.write("Upload a PPT file to validate instructional chunking.")
@@ -16,23 +18,22 @@ uploaded_file = st.file_uploader("Upload PPT file", type=["pptx"])
 if uploaded_file:
     if st.button("Run QC"):
         with st.spinner("Running QC..."):
-            with open("config/qc_rules.yaml") as f:
-                rules = yaml.safe_load(f)
-
             slides = read_ppt(uploaded_file)
-            results = []
 
-            for slide in slides:
-                res = validate_slide(slide, rules)
-                res["Recommendation"] = generate_explanation(res.get("Reason Code"))
-                results.append(res)
+            all_rows = []
+            summary_rows = []
+
+            for slide_no, slide in enumerate(slides, start=1):
+                rows, summary = analyze_slide(slide, slide_no)
+                all_rows.extend(rows)
+                summary_rows.extend(summary)
 
             st.success("QC Completed")
 
-            st.subheader("QC Results")
-            st.dataframe(results, use_container_width=True)
+            st.subheader("QC Results (Slide Point Analysis)")
+            st.dataframe(all_rows, use_container_width=True)
 
-            excel_file = create_excel(results)
+            excel_file = create_excel(all_rows, summary_rows)
 
             st.download_button(
                 label="⬇ Download Excel Report",
